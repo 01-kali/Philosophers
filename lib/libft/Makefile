@@ -50,10 +50,7 @@ SRC = 	ft_isalpha.c\
 	ft_putstr_fd.c\
 	ft_putendl_fd.c\
 	ft_putnbr_fd.c\
-
-OBJ = $(SRC:.c=.o)
-
-SRCB =	ft_lstnew_bonus.c\
+	ft_lstnew_bonus.c\
 	ft_lstsize_bonus.c\
 	ft_lstlast_bonus.c\
 	ft_lstadd_back_bonus.c\
@@ -63,7 +60,8 @@ SRCB =	ft_lstnew_bonus.c\
 	ft_lstiter_bonus.c\
 	ft_lstmap_bonus.c\
 
-OBJB = $(SRCB:.c=.o)
+
+OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
@@ -73,14 +71,12 @@ $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
 	$(AR) $(NAME) $@
 
-bonus:	$(OBJB) $(NAME)
-	
 clean:
-	$(RM) $(OBJ) $(OBJB)
+	$(RM) $(OBJ)
 
 fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re

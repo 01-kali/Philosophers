@@ -2,7 +2,7 @@ NAME = philo
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -I./includes -I$(LIBFT_SRC) -g -fsanitize=address -g3 
 
-LIBFT_SRC = ./lib/libft/
+LIBFT_SRC = ./lib/libft
 LIBFT = $(LIBFT_SRC)/libft.a
 
 SRC = ./utils/philo.c\
