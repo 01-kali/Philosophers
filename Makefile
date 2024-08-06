@@ -14,7 +14,7 @@ all : $(NAME)
 $(NAME): $(OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 
-$(LIBFT): $(LIBFT_SRC)/*.c
+$(LIBFT):
 	make -C $(LIBFT_SRC)
 
 clean:
