@@ -11,49 +11,39 @@
 /* ************************************************************************** */
 
 #include <philo.h>
-#include <stdio.h>
-#include <pthread.h>
-#include <unistd.h>
 
-void* bake_cake(void* arg) {
-    printf("Baking cake...\n");
-    sleep(2); // Simulate time taken to bake a cake
-    printf("Cake is ready!\n");
-    (void)arg;
-    return NULL;
+void *philo(void* arg)
+{
+  (void)arg;
+  return(NULL);
 }
 
-void* make_soup(void* arg) {
-    printf("Making soup...\n");
-    sleep(1); // Simulate time taken to make soup
-    printf("Soup is ready!\n");
-    (void)arg;
-    return NULL;
+int main(int argc, char **argv)
+{
+  pthread_t *philosopher;
+  int i;
+  int n_p;
+
+  i = -1;
+  if(argc == 5)
+  {
+    n_p = ft_atoi(argv[1]);
+    while(++i < n_p)
+    {
+      threads[i] = 
+      pthread_create(&philosopher[i],NULL,philo, NULL);
+    }
+    i = -1;
+    while (++i < np)
+      pthread_join(philosopher[i], NULL);
+  }
+  else if(argc == 6)
+  {
+    
+  }
+  else
+  {
+    printf("error, check the number of arguments.\n");
+    return(1);
+  }
 }
-
-void* prepare_salad(void* arg) {
-    printf("Preparing salad...\n");
-    sleep(1); // Simulate time taken to prepare salad
-    printf("Salad is ready!\n");
-    (void)arg;
-    return NULL;
-}
-
-int main() {
-    pthread_t thread1, thread2, thread3;
-
-    // Create threads
-    pthread_create(&thread1, NULL, bake_cake, NULL);
-    pthread_create(&thread2, NULL, make_soup, NULL);
-    pthread_create(&thread3, NULL, prepare_salad, NULL);
-
-    // Wait for threads to complete
-    pthread_join(thread1, NULL);
-    pthread_join(thread2, NULL);
-    pthread_join(thread3, NULL);
-    printf("%ld\n",thread1);
-    printf("%ld\n",thread2);
-    printf("%ld\n",thread3);
-    return 0;
-}
-
