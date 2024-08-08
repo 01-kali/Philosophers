@@ -30,11 +30,11 @@ int main(int argc, char **argv)
     n_p = ft_atoi(argv[1]);
     while(++i < n_p)
     {
-      threads[i] = 
+      philosopher[i] = 
       pthread_create(&philosopher[i],NULL,philo, NULL);
     }
     i = -1;
-    while (++i < np)
+    while (++i < n_p)
       pthread_join(philosopher[i], NULL);
   }
   else if(argc == 6)
