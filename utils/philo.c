@@ -18,6 +18,12 @@ void *philo(void* arg)
   return(NULL);
 }
 
+pthread_t creat_philo()
+{
+  pthread_t philo;
+  return(philo);
+}
+
 int main(int argc, char **argv)
 {
   pthread_t *philosopher;
@@ -31,11 +37,11 @@ int main(int argc, char **argv)
     while(++i < n_p)
     {
       philosopher[i] = 
-      pthread_create(&philosopher[i],NULL,philo, NULL);
+      pthread_create(&creat_philo,NULL,philo, NULL);
     }
     i = -1;
     while (++i < n_p)
-      pthread_join(philosopher[i], NULL);
+      pthread_join(philosopher, NULL);
   }
   else if(argc == 6)
   {

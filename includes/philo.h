@@ -14,9 +14,16 @@
 #define PHILO_H
 
 #include <pthread.h>
+# include <sys/time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <libft.h>
+
+typedef struct s_philo
+{
+  pthread_t philosopher;
+  
+} t_philo
 
 #endif
