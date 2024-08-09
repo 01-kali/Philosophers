@@ -25,12 +25,11 @@ void set_data(t_data *data, int argc, char **argv)
     data->number_of_meals = ft_atoi(argv[5]);
   else
     data->number_of_meals = -1;
-  data->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) *\
-                                       data->number_of_philo);
-  if(!data->forks)
-    return;
-  data->philosophers = (t_philo *)malloc(sizeof(t_philo) *\
-                        data->number_of_philo);
+  printf("%d %d %d %d %d\n",data->number_of_philo,data->time_to_die,data->time_to_eat,data->time_to_sleep,data->number_of_meals);
+  data->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * data->number_of_philo);
+  data->philosophers = (t_philo *)malloc(sizeof(t_philo) * data->number_of_philo);
+  if(!data->forks || !data->philosophers)
+    exit(1);
   while(++i < data->number_of_philo)
   {
     data->philosophers[i].i = i;
@@ -39,6 +38,28 @@ void set_data(t_data *data, int argc, char **argv)
       [(i + 1) % data->number_of_philo];
     data->philosophers[i].number_of_meals_eaten = 0;
   }
+}
+
+void *philo(void *arg)
+{
+  t_philo *philosofer = (t_philo *)arg;
+
+  while(1)
+  {
+
+  }
+}
+
+void create_philo(t_data *data)
+{
+  int i;
+
+  i = -1;
+  while(++i < data->number_of_philo)
+    pthread_create(&data->philosophers[i].philosopher, NULL, philo, &data->philosophers[i]);
+  i = -1;
+  while(++i < data->number_of_philo)
+    pthread_join(data->philosophers[i].philosopher, NULL);
 }
 
 int main(int argc, char **argv)
@@ -51,4 +72,5 @@ int main(int argc, char **argv)
     return(1);
   }
   set_data(&data, argc, argv);
+  create_philo(&data);
 }
