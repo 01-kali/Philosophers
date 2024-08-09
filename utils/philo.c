@@ -12,44 +12,43 @@
 
 #include <philo.h>
 
-void *philo(void* arg)
+void set_data(t_data *data, int argc, char **argv)
 {
-  (void)arg;
-  return(NULL);
-}
+  int i;
 
-pthread_t creat_philo()
-{
-  pthread_t philo;
-  return(philo);
+  i = -1;
+  data->number_of_philo = ft_atoi(argv[1]);
+  data->time_to_die = ft_atoi(argv[2]);
+  data->time_to_eat = ft_atoi(argv[3]);
+  data->time_to_sleep = ft_atoi(argv[4]);
+  if(argc == 6)
+    data->number_of_meals = ft_atoi(argv[5]);
+  else
+    data->number_of_meals = -1;
+  data->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) *\
+                                       data->number_of_philo);
+  if(!data->forks)
+    return;
+  data->philosophers = (t_philo *)malloc(sizeof(t_philo) *\
+                        data->number_of_philo);
+  while(++i < data->number_of_philo)
+  {
+    data->philosophers[i].i = i;
+    data->philosophers[i].l_fork = &data->forks[i];
+    data->philosophers[i].r_fork = &data->forks\
+      [(i + 1) % data->number_of_philo];
+    data->philosophers[i].number_of_meals_eaten = 0;
+  }
 }
 
 int main(int argc, char **argv)
 {
-  pthread_t *philosopher;
-  int i;
-  int n_p;
-
-  i = -1;
-  if(argc == 5)
+  t_data data;
+  
+  if(argc < 5 || argc > 6)
   {
-    n_p = ft_atoi(argv[1]);
-    while(++i < n_p)
-    {
-      philosopher[i] = 
-      pthread_create(&creat_philo,NULL,philo, NULL);
-    }
-    i = -1;
-    while (++i < n_p)
-      pthread_join(philosopher, NULL);
-  }
-  else if(argc == 6)
-  {
-    
-  }
-  else
-  {
-    printf("error, check the number of arguments.\n");
+    printf("Error.\n");
     return(1);
   }
+  set_data(&data, argc, argv);
 }

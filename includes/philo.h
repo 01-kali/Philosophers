@@ -24,19 +24,19 @@ typedef struct s_philo
 {
   int i;
   pthread_t philosopher;
-  pthread_mutex *l_forke;
-  pthread_mutex *r_forke;
+  pthread_mutex_t *l_fork;
+  pthread_mutex_t *r_fork;
   int number_of_meals_eaten;
-} t_philo
+} t_philo;
 
 typedef struct s_data
 {
-  int number_of_philosophers;
+  int number_of_philo;
   int time_to_die;
   int time_to_eat;
   int time_to_sleep;
   int number_of_meals;
-  pthread_mutex *photkes;
+  pthread_mutex_t *forks;
   t_philo *philosophers;
 } t_data;
 
