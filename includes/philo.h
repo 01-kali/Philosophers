@@ -20,15 +20,6 @@
 #include <unistd.h>
 #include <libft.h>
 
-typedef struct s_philo
-{
-  int i;
-  pthread_t philosopher;
-  pthread_mutex_t *l_fork;
-  pthread_mutex_t *r_fork;
-  int number_of_meals_eaten;
-} t_philo;
-
 typedef struct s_data
 {
   int number_of_philo;
@@ -36,8 +27,20 @@ typedef struct s_data
   int time_to_eat;
   int time_to_sleep;
   int number_of_meals;
+  long long start;
+  int died;
   pthread_mutex_t *forks;
-  t_philo *philosophers;
 } t_data;
+
+typedef struct s_philo
+{
+  int i;
+  pthread_t philosopher;
+  pthread_mutex_t *l_fork;
+  pthread_mutex_t *r_fork;
+  int number_of_meals_eaten;
+  long long last_meal;
+  t_data *data;
+} t_philo;
 
 #endif
