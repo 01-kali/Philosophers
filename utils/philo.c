@@ -33,20 +33,20 @@ int check_death(t_philo *philosopher)
   t_data *data;
 
   data = philosopher->data;
-  //pthread_mutex_lock(&data->death);
+  pthread_mutex_lock(&data->death);
   if(data->died == 1)
   {
-    //pthread_mutex_unlock(&data->death);
+    pthread_mutex_unlock(&data->death);
     return(1);
   }
   if(get_time() - philosopher->last_meal >= data->time_to_die)
   {
     printf("%lld %d died\n", get_time() - data->start, philosopher->i + 1);
     data->died = 1;
-    //pthread_mutex_unlock(&data->death);
+    pthread_mutex_unlock(&data->death);
     return(1);
   }
-  //pthread_mutex_unlock(&data->death);
+  pthread_mutex_unlock(&data->death);
   return(0);
 }
 
@@ -94,6 +94,7 @@ int take_forks(t_philo *philosopher)
 {
   if((philosopher->i + 1) % 2 == 1)
   {
+    ft_usleep(1);
     pthread_mutex_lock(philosopher->l_fork);
     printf("%lld %d has taken a fork\n",get_time() - philosopher->data->start, philosopher->i + 1);
     pthread_mutex_lock(philosopher->r_fork);
@@ -101,7 +102,6 @@ int take_forks(t_philo *philosopher)
   }
   else
   {
-    ft_usleep(1);
     pthread_mutex_lock(philosopher->r_fork);
     printf("%lld %d has taken a fork\n",get_time() - philosopher->data->start, philosopher->i + 1);
     pthread_mutex_lock(philosopher->l_fork);
@@ -122,7 +122,6 @@ int eating(t_philo *philosopher)
   philosopher->last_meal = get_time();
   printf("%lld %d is eating\n",get_time() - philosopher->data->start, philosopher->i + 1);
   ft_usleep(philosopher->data->time_to_eat);
-  //printf("%lld %d is finish eating\n",get_time() - philosopher->data->start, philosopher->i + 1);
   unlock_forks(philosopher);
   philosopher->number_of_meals_eaten++;
   if(check_death(philosopher))
@@ -135,9 +134,8 @@ void *philo(void *arg)
   t_philo *philosopher = (t_philo *)arg;
   t_data *data = philosopher->data;
 
-  while(!data->died)
+  while(1)
   {
-    
     if(eating(philosopher))
       break;
     if(data->number_of_meals != -1 && philosopher->number_of_meals_eaten >= data->number_of_meals)
@@ -170,17 +168,21 @@ int main(int argc, char **argv)
   int i;
 
   philosophers = NULL;
-  if(argc < 5 || argc > 6 || ft_atoi(argv[1]) < 2 || ft_atoi(argv[2]) < 0 || ft_atoi(argv[3]) < 0 || ft_atoi(argv[4]) < 0)
-  {
-    printf("Error.\n");
-    return(1);
-  }
-  if(argc == 6 && ft_atoi(argv[5]) < 0)
+  if((argc == 6 && ft_atoi(argv[5]) < 0) || argc < 5 || argc > 6 || ft_atoi(argv[1]) < 0 || ft_atoi(argv[2]) < 0 || ft_atoi(argv[3]) < 0 || ft_atoi(argv[4]) < 0)
   {
     printf("Error.\n");
     return(1);
   }
   set_data(&philosophers ,&data, argc, argv);
+  if (data.number_of_philo == 1)
+  {
+    printf("%lld 1 has taken a fork\n", get_time() - data.start);
+    ft_usleep(data.time_to_die);
+    printf("%lld 1 died\n", get_time() - data.start);
+    free(data.forks);
+    free(philosophers);
+    return 0;
+  }
   create_philo(&data, philosophers);
   i = -1;
   while(++i < data.number_of_philo)
