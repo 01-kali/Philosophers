@@ -19,6 +19,15 @@ long long get_time()
   return((t.tv_sec * 1000) + (t.tv_usec / 1000));
 }
 
+void	ft_usleep(long long time_to_sleep)
+{
+	long long	start_time;
+
+	start_time = get_time();
+	while (get_time() - start_time < time_to_sleep)
+		usleep(time_to_sleep / 10);
+}
+
 int check_death(t_philo *philosopher)
 {
   t_data *data;
@@ -83,46 +92,20 @@ void unlock_forks(t_philo *philosopher)
 
 int take_forks(t_philo *philosopher)
 {
-  //if(check_death(philosopher))
-  //  return(1);
   if((philosopher->i + 1) % 2 == 1)
   {
     pthread_mutex_lock(philosopher->l_fork);
     printf("%lld %d has taken a fork\n",get_time() - philosopher->data->start, philosopher->i + 1);
-    //if(check_death(philosopher))
-    //{
-    //  pthread_mutex_unlock(philosopher->l_fork);
-    //  return(1);
-    //}
     pthread_mutex_lock(philosopher->r_fork);
     printf("%lld %d has taken a fork\n",get_time() - philosopher->data->start, philosopher->i + 1);
-    //if(check_death(philosopher))
-    //{
-    //  unlock_forks(philosopher);
-    //  return(1);
-    //}
   }
   else
   {
+    ft_usleep(1);
     pthread_mutex_lock(philosopher->r_fork);
     printf("%lld %d has taken a fork\n",get_time() - philosopher->data->start, philosopher->i + 1);
-    //if(check_death(philosopher))
-    //{
-    //  pthread_mutex_unlock(philosopher->r_fork);
-    //  return(1);
-    //}
     pthread_mutex_lock(philosopher->l_fork);
     printf("%lld %d has taken a fork\n",get_time() - philosopher->data->start, philosopher->i + 1);
-    //if(check_death(philosopher))
-    //{
-    //  unlock_forks(philosopher);
-    //  return(1);
-    //}
-  }
-  if(check_death(philosopher))
-  {
-    unlock_forks(philosopher);
-    return(1);
   }
   return(0);
 }
@@ -131,9 +114,15 @@ int eating(t_philo *philosopher)
 {
   if(take_forks(philosopher))
     return (1);
+  if(check_death(philosopher))
+  {
+    unlock_forks(philosopher);
+    return(1);
+  }
   philosopher->last_meal = get_time();
   printf("%lld %d is eating\n",get_time() - philosopher->data->start, philosopher->i + 1);
-  usleep(philosopher->data->time_to_eat * 1000);
+  ft_usleep(philosopher->data->time_to_eat);
+  //printf("%lld %d is finish eating\n",get_time() - philosopher->data->start, philosopher->i + 1);
   unlock_forks(philosopher);
   philosopher->number_of_meals_eaten++;
   if(check_death(philosopher))
@@ -148,19 +137,16 @@ void *philo(void *arg)
 
   while(!data->died)
   {
-    if(data->number_of_meals != -1 && philosopher->number_of_meals_eaten >= data->number_of_meals)
-      break;
-    if(check_death(philosopher))
-      break;
+    
     if(eating(philosopher))
       break;
-    if(check_death(philosopher))
+    if(data->number_of_meals != -1 && philosopher->number_of_meals_eaten >= data->number_of_meals)
       break;
     printf("%lld %d is sleeping\n",get_time() - data->start,philosopher->i + 1);
-    usleep(data->time_to_sleep * 1000);
+    ft_usleep(data->time_to_sleep);
+    printf("%lld %d is thinking\n",get_time() - data->start, philosopher->i + 1);
     if(check_death(philosopher))
       break;
-    printf("%lld %d is thinking\n",get_time() - data->start, philosopher->i + 1);
   }
   return(NULL);
 }
