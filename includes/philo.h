@@ -18,7 +18,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <libft.h>
 
 typedef struct s_data
 {
@@ -43,5 +42,18 @@ typedef struct s_philo
   long long last_meal;
   t_data *data;
 } t_philo;
+
+long long get_time();
+void	ft_usleep(long long time_to_sleep);
+int check_death(t_philo *philosopher);
+int	ft_atoi(const char *str);
+void set_data2(t_philo **philosophers ,t_data *data, int argc, char **argv);
+void set_data1(t_philo **philosophers ,t_data *data, int argc, char **argv);
+void unlock_forks(t_philo *philosopher);
+int take_forks1(t_philo *philosopher);
+int take_forks2(t_philo *philosopher);
+int eating(t_philo *philosopher);
+void *philo(void *arg);
+void create_philo(t_data *data, t_philo *philosophers);
 
 #endif
