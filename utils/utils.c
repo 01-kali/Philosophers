@@ -6,17 +6,18 @@
 /*   By: zelkalai <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 05:17:19 by zelkalai          #+#    #+#             */
-/*   Updated: 2024/08/23 05:17:21 by zelkalai         ###   ########.fr       */
+/*   Updated: 2024/08/23 05:38:51 by zelkalai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-long long get_time()
+long long	get_time(void)
 {
-  struct timeval t;
-  gettimeofday(&t, NULL);
-  return((t.tv_sec * 1000) + (t.tv_usec / 1000));
+	struct timeval	t;
+
+	gettimeofday(&t, NULL);
+	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
 }
 
 void	ft_usleep(long long time_to_sleep)
@@ -28,10 +29,10 @@ void	ft_usleep(long long time_to_sleep)
 		usleep(time_to_sleep / 10);
 }
 
-void unlock_forks(t_philo *philosopher)
+void	unlock_forks(t_philo *philosopher)
 {
-  pthread_mutex_unlock(philosopher->l_fork);
-  pthread_mutex_unlock(philosopher->r_fork);
+	pthread_mutex_unlock(philosopher->l_fork);
+	pthread_mutex_unlock(philosopher->r_fork);
 }
 
 int	ft_atoi(const char *str)
@@ -58,14 +59,15 @@ int	ft_atoi(const char *str)
 	return ((int)r * s);
 }
 
-void create_philo(t_data *data, t_philo *philosophers)
+void	create_philo(t_data *data, t_philo *philosophers)
 {
-  int i;
+	int	i;
 
-  i = -1;
-  while(++i < data->number_of_philo)
-    pthread_create(&philosophers[i].philosopher, NULL, philo, &philosophers[i]);
-  i = -1;
-  while(++i < data->number_of_philo)
-    pthread_join(philosophers[i].philosopher, NULL);
+	i = -1;
+	while (++i < data->number_of_philo)
+		pthread_create(&philosophers[i].philosopher, NULL, philo, \
+				&philosophers[i]);
+	i = -1;
+	while (++i < data->number_of_philo)
+		pthread_join(philosophers[i].philosopher, NULL);
 }

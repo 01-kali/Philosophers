@@ -3,6 +3,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror  -I./includes -g -fsanitize=thread -g3 
 
 SRC = ./utils/main.c\
+			./utils/philo2.c\
 			./utils/philo.c\
 			./utils/utils.c\
 
