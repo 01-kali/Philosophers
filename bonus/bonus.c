@@ -19,16 +19,20 @@ void	ft_usleep(long long time_to_sleep)
 
 int check_death(t_philo **philosophers, t_data *data)
 {
+  sem_wait(&(data->death));
 	if (data->died == 1)
 	{
+    sem_post(&(data->death));
 		return (1);
 	}
-	if (get_time() - philosopher->last_meal >= data->time_to_die)
+	if (get_time() - (*philosophers)->last_meal >= data->time_to_die)
 	{
-		printf("%lld %d died\n", get_time() - data->start, philosopher->i + 1);
+		printf("%lld %d died\n", get_time() - data->start, (*philosophers)->i + 1);
 		data->died = 1;
+    sem_post(&(data->death));
 		return (1);
 	}
+  sem_post(&(data->death));
 	return (0);
 }
 
@@ -56,6 +60,12 @@ int	ft_atoi(const char *str)
 	return ((int)r * s);
 }
 
+void post_forks(t_data *data)
+{
+  sem_post(&(data->forks));
+  sem_post(&(data->forks));
+}
+
 int take_forkes(t_philo **philosophers, t_data *data)
 {
   if(((*philosophers)->i + 1) % 2 == 1)
@@ -63,17 +73,41 @@ int take_forkes(t_philo **philosophers, t_data *data)
     ft_usleep(1);
     if(check_death(philosophers, data))
       return(1);
+    sem_wait(&(data->forks));
+    if (check_death(philosophers, data))
+	  {
+      sem_post(&(data->forks));
+		  return (1);
+	  }
     printf("%lld %d has taken a fork\n", get_time() - data->start, (*philosophers)->i + 1);
+    sem_wait(&(data->forks));
+    if (check_death(philosophers, data))
+	  {
+      post_forks(data);
+		  return (1);
+	  }
     printf("%lld %d has taken a fork\n", get_time() - data->start, (*philosophers)->i + 1);
-    
   }
   else
   {
     if(check_death(philosophers, data))
       return(1);
+    sem_wait(&(data->forks));
+    if (check_death(philosophers, data))
+	  {
+      sem_post(&(data->forks));
+		  return (1);
+	  }
     printf("%lld %d has taken a fork\n", get_time() - data->start, (*philosophers)->i + 1);
+    sem_wait(&(data->forks));
+    if (check_death(philosophers, data))
+	  {
+      post_forks(data);
+		  return (1);
+	  }
     printf("%lld %d has taken a fork\n", get_time() - data->start, (*philosophers)->i + 1);
   }
+  return (0);
 }
 
 int eating(t_philo **philosophers, t_data *data)
@@ -82,10 +116,10 @@ int eating(t_philo **philosophers, t_data *data)
     return(1);
   (*philosophers)->last_meal = get_time();
   printf("%lld %d is eating\n", get_time() - data->start, (*philosophers)->i + 1);
-  ft_usleep(time_to_eat);
+  ft_usleep(data->time_to_eat);
   (*philosophers)->number_of_meals_eaten++;
   if(check_death(philosophers, data))
-    return(1)
+    return(1);
   return(0);
 }
 
@@ -104,6 +138,7 @@ void philo(t_philo **philosophers, t_data *data)
     printf("%lld %d is thinking\n", get_time() - data->start, (*philosophers)->i + 1);
   }
 }
+
 void set_data(t_philo **philosophers, t_data *data, int argc, char **argv)
 {
   int i;
@@ -118,11 +153,11 @@ void set_data(t_philo **philosophers, t_data *data, int argc, char **argv)
     data->number_of_meals = -1;
   data->start = get_time();
   data->died = 0;
-  data->death = sem_open("/death", O_CREAT, 1);
-  data->forks = sem_open("/forks", O_CREAT, data->number_of_philo);
-  if(data->forks == SEM_FAILED || data->death == SEM_FAILED)
+  if(sem_init(&(data->death), 1, 1) != 0)
     exit(1);
-  philosophers = (t_philo *)malloc(sizeof(t_philo) * data->number_of_philo);
+  if(sem_init(&(data->forks), 1, data->number_of_philo) != 0)
+    exit(1);
+  *philosophers = (t_philo *)malloc(sizeof(t_philo) * data->number_of_philo);
   i = -1;
   while(++i < data->number_of_philo)
   {
@@ -133,7 +168,7 @@ void set_data(t_philo **philosophers, t_data *data, int argc, char **argv)
     (*philosophers)[i].pid = fork();
     if((*philosophers)[i].pid == 0)
         philo(philosophers, data);
-    else if (pid < 0)
+    else if ((*philosophers)[i].pid < 0)
         exit(1);
   }
 }
