@@ -71,7 +71,7 @@ void	set_data1(t_philo **philosophers, t_data *data, int argc, char **argv)
 		(*philosophers)[i].r_fork = &data->forks[(i + 1)
 			% data->number_of_philo];
 		(*philosophers)[i].number_of_meals_eaten = 0;
-		(*philosophers)[i].last_meal = get_time();
+		(*philosophers)[i].last_meal = 0;
 		(*philosophers)[i].data = data;
 	}
 }
