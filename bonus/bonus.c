@@ -163,7 +163,7 @@ void set_data(t_philo **philosophers, t_data *data, int argc, char **argv)
   {
     (*philosophers)[i].i = i;
     (*philosophers)[i].number_of_meals_eaten = 0;
-    (*philosophers)[i].last_meal = 0;
+    (*philosophers)[i].last_meal = get_time();
     (*philosophers)[i].data = data;
     (*philosophers)[i].pid = fork();
     if((*philosophers)[i].pid == 0)
