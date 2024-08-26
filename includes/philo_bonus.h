@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/wait.h>
 
 typedef struct s_data
 {
@@ -17,8 +18,9 @@ typedef struct s_data
   int number_of_meals;
   long long start;
   int died;
-  sem_t death;
-  sem_t forks;
+  pid_t *pids;
+  sem_t *death;
+  sem_t *forks;
 } t_data;
 
 typedef struct s_philo

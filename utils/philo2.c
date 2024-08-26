@@ -23,7 +23,7 @@ int	check_death(t_philo *philosopher)
 		pthread_mutex_unlock(&data->death);
 		return (1);
 	}
-	if (get_time() - philosopher->last_meal >= data->time_to_die)
+	if (get_time() - philosopher->last_meal > data->time_to_die)
 	{
 		printf("%lld %d died\n", get_time() - data->start, philosopher->i + 1);
 		data->died = 1;

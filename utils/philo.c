@@ -41,7 +41,7 @@ int	take_forks2(t_philo *philosopher)
 
 int	take_forks1(t_philo *philosopher)
 {
-	ft_usleep(1);
+	usleep(500);
 	if (check_death(philosopher))
 		return (1);
 	pthread_mutex_lock(philosopher->l_fork);
