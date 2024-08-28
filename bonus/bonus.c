@@ -214,8 +214,8 @@ void clean(t_data *data, t_philo *philosophers)
 
 int main(int argc, char **argv)
 {
-  //t_data data;
-  //t_philo *philosophers;
+  t_data data;
+  t_philo *philosophers;
 
   if(argc == 6 || argc == 5)
   {
@@ -230,8 +230,8 @@ int main(int argc, char **argv)
       printf("Error: Invalid argument.\n");
       return (1);
     }
-    //set_data(&philosophers, &data, argc, argv);
-    //clean(&data, philosophers);
+    set_data(&philosophers, &data, argc, argv);
+    clean(&data, philosophers);
   }
   else
   {

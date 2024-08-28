@@ -49,8 +49,7 @@ int	main(int argc, char **argv)
 	  	printf("%lld 1 has taken a fork\n", get_time() - data.start);
 	  	ft_usleep(data.time_to_die);
 	  	printf("%lld 1 died\n", get_time() - data.start);
-	  	free(data.forks);
-	  	free(philosophers);
+	  	dest(&data, philosophers);
 	  	return (0);
 	  }
 	  create_philo(&data, philosophers);
