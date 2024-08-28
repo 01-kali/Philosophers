@@ -2,7 +2,7 @@ NAME = philo
 NAME_B = philo_bonus
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I./includes -g #-fsanitize=thread -g3 
+CFLAGS = -Wall -Wextra -Werror -I./includes -g -fsanitize=thread -g3 
 
 SRC = ./utils/main.c\
 			./utils/philo2.c\
@@ -20,7 +20,9 @@ all : $(NAME)
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-bonus: $(OBJ_B)
+bonus: $(NAME_B)
+
+$(NAME_B): $(OBJ_B)
 	$(CC) $(CFLAGS) $(OBJ_B) -o $(NAME_B)
 
 clean:

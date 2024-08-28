@@ -35,28 +35,37 @@ void	unlock_forks(t_philo *philosopher)
 	pthread_mutex_unlock(philosopher->r_fork);
 }
 
-int	ft_atoi(const char *str)
+int ft_atoi(const char *str)
 {
-	int	r;
-	int	s;
-
-	r = 0;
-	s = 1;
-	while (*str == ' ' || *str == '\t' || *str == '\v' || *str == '\n'
-		|| *str == '\r' || *str == '\f')
-		str++;
-	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			s = -1;
-		str++;
-	}
-	while (*str && *str >= '0' && *str <= '9')
-	{
-		r = r * 10 + (*str - '0');
-		str++;
-	}
-	return ((int)r * s);
+  int r;
+  int s;
+  
+  r = 0;
+  s = 1;
+  while (*str == ' ' || *str == '\t' || *str == '\v' || *str == '\n'
+      || *str == '\r' || *str == '\f')
+      str++;
+  if(*str == '\0')
+    return(-1);
+  if (*str == '-' || *str == '+')
+  {
+      if (*str == '-')
+          s = -1;
+      str++;
+  }
+  while (*str && *str >= '0' && *str <= '9')
+  {
+      r = r * 10 + (*str - '0');
+      str++;
+  }
+  if(*str && *str != ' ' && (*str < '0' || *str > '9'))
+    return(-1);
+  while(*str && (*str == ' ' || *str == '\t' || *str == '\v' || *str == '\n'
+      || *str == '\r' || *str == '\f'))
+    str++;
+  if(*str != '\0')
+    return(-1);
+  return ((int)r * s);
 }
 
 void	create_philo(t_data *data, t_philo *philosophers)
