@@ -1,0 +1,87 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_data_bonus.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zelkalai <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/28 16:38:17 by zelkalai          #+#    #+#             */
+/*   Updated: 2024/08/28 16:38:19 by zelkalai         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <philo_bonus.h>
+
+int	check_death(t_philo *philosopher, t_data *data)
+{
+	int	i;
+
+	sem_wait(data->death);
+	if (get_time() - philosopher->last_meal > data->time_to_die)
+	{
+		usleep(2);
+		if (philosopher->i + 1 > 2)
+		{
+			sem_post(data->death);
+			ft_usleep(1);
+			sem_wait(data->death);
+		}
+		printf("%lld %d died\n", get_time() - data->start, philosopher->i + 1);
+		i = -1;
+		data->died = 1;
+		sem_post(data->death);
+		exit(1);
+	}
+	sem_post(data->death);
+	return (0);
+}
+
+void	set_data2(t_philo **philosophers, t_data *data, int argc, char **argv)
+{
+	data->number_of_philo = ft_atoi(argv[1]);
+	data->time_to_die = ft_atoi(argv[2]);
+	data->time_to_eat = ft_atoi(argv[3]);
+	data->time_to_sleep = ft_atoi(argv[4]);
+	if (argc == 6)
+		data->number_of_meals = ft_atoi(argv[5]);
+	else
+		data->number_of_meals = -1;
+	data->start = get_time();
+	data->died = 0;
+	data->pids = (pid_t *)malloc(sizeof(pid_t) * data->number_of_philo);
+	sem_unlink("/death");
+	data->death = sem_open("/death", O_CREAT, 0644, 1);
+	sem_unlink("/forks");
+	data->forks = sem_open("/forks", O_CREAT, 0644, data->number_of_philo);
+	if (data->forks == SEM_FAILED || data->death == SEM_FAILED)
+	{
+		perror("sem_open failed");
+		exit(0);
+	}
+	*philosophers = (t_philo *)malloc(sizeof(t_philo) * data->number_of_philo);
+}
+
+void	set_data(t_philo **philosophers, t_data *data, int argc, char **argv)
+{
+	int	i;
+
+	set_data2(philosophers, data, argc, argv);
+	i = -1;
+	while (++i < data->number_of_philo)
+	{
+		(*philosophers)[i].i = i;
+		(*philosophers)[i].number_of_meals_eaten = 0;
+		(*philosophers)[i].last_meal = get_time();
+		(*philosophers)[i].data = data;
+		(*philosophers)[i].pid = fork();
+		if ((*philosophers)[i].pid == 0)
+		{
+			philo(&(*philosophers)[i], data);
+			exit(0);
+		}
+		else if ((*philosophers)[i].pid > 0)
+			data->pids[i] = (*philosophers)[i].pid;
+		else
+			exit(1);
+	}
+}

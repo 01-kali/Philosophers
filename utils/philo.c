@@ -6,7 +6,7 @@
 /*   By: zelkalai <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:26:56 by zelkalai          #+#    #+#             */
-/*   Updated: 2024/08/23 05:45:40 by zelkalai         ###   ########.fr       */
+/*   Updated: 2024/08/28 16:48:38 by zelkalai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ int	take_forks2(t_philo *philosopher)
 		return (1);
 	}
 	printf("%lld %d has taken a fork\n", \
-			get_time() - \
-			philosopher->data->start, \
+			get_time() - philosopher->data->start, \
 			philosopher->i + 1);
 	pthread_mutex_lock(philosopher->l_fork);
 	if (check_death(philosopher))
@@ -33,15 +32,14 @@ int	take_forks2(t_philo *philosopher)
 		return (1);
 	}
 	printf("%lld %d has taken a fork\n", \
-			get_time() - \
-			philosopher->data->start, \
+			get_time() - philosopher->data->start, \
 			philosopher->i + 1);
 	return (0);
 }
 
 int	take_forks1(t_philo *philosopher)
 {
-	usleep(500);
+	usleep(800);
 	if (check_death(philosopher))
 		return (1);
 	pthread_mutex_lock(philosopher->l_fork);
@@ -115,14 +113,12 @@ void	*philo(void *arg)
 				&& philosopher->number_of_meals_eaten >= data->number_of_meals)
 			break ;
 		printf("%lld %d is sleeping\n", \
-				get_time() - data->start, \
-				philosopher->i + 1);
+				get_time() - data->start, philosopher->i + 1);
 		ft_usleep(data->time_to_sleep);
 		if (check_death(philosopher))
 			break ;
 		printf("%lld %d is thinking\n", \
-				get_time() - data->start, \
-				philosopher->i + 1);
+				get_time() - data->start, philosopher->i + 1);
 	}
 	return (NULL);
 }

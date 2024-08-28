@@ -43,20 +43,27 @@ typedef struct s_philo
 	t_data			*data;
 }					t_philo;
 
-long long			get_time(void);
-void				ft_usleep(long long time_to_sleep);
+void				dest(t_data *data, t_philo *philosophers);
+int					check_arg(int argc, char **argv);
+
+int					take_forks2(t_philo *philosopher);
+int					take_forks1(t_philo *philosopher);
+int					take_forks0(t_philo *philosopher);
+int					eating(t_philo *philosopher);
+void				*philo(void *arg);
+
 int					check_death(t_philo *philosopher);
-int					ft_atoi(const char *str);
 void				set_data2(t_philo **philosophers, t_data *data, int argc,
 						char **argv);
 void				set_data1(t_philo **philosophers, t_data *data, int argc,
 						char **argv);
-void				unlock_forks(t_philo *philosopher);
-int					take_forks0(t_philo *philosopher);
-int					take_forks1(t_philo *philosopher);
-int					take_forks2(t_philo *philosopher);
-int					eating(t_philo *philosopher);
-void				*philo(void *arg);
+
 void				create_philo(t_data *data, t_philo *philosophers);
+
+long long			get_time(void);
+void				ft_usleep(long long time_to_sleep);
+void				unlock_forks(t_philo *philosopher);
+int					ft_atoi2(const char *str);
+int					ft_atoi(const char *str);
 
 #endif

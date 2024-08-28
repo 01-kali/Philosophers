@@ -2,16 +2,20 @@ NAME = philo
 NAME_B = philo_bonus
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I./includes -g -fsanitize=thread -g3 
+CFLAGS = -Wall -Wextra -Werror -I./includes -g #-fsanitize=thread -g3 
 
 SRC = ./utils/main.c\
-			./utils/philo2.c\
+			./utils/set_data.c\
 			./utils/philo.c\
 			./utils/utils.c\
+			./utils/create_philo.c\
 
 OBJ = $(SRC:.c=.o)
 
-SRC_B = ./bonus/bonus.c\
+SRC_B = ./bonus/main_bonus.c\
+				./bonus/philo_bonus.c\
+				./bonus/set_data_bonus.c\
+				./bonus/utils_bonus.c\
 
 OBJ_B = $(SRC_B:.c=.o)
 
