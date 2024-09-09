@@ -14,14 +14,13 @@
 
 void	clean(t_data *data, t_philo *philosophers)
 {
-	pid_t	pid;
 	int		status;
 	int		i;
 
 	i = -1;
 	while (++i < data->number_of_philo)
 	{
-		pid = waitpid(-1, &status, 0);
+		waitpid(-1, &status, 0);
 		if (status != 0)
 		{
 			i = -1;
