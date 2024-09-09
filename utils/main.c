@@ -6,7 +6,7 @@
 /*   By: zelkalai <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 05:17:10 by zelkalai          #+#    #+#             */
-/*   Updated: 2024/08/28 17:15:47 by zelkalai         ###   ########.fr       */
+/*   Updated: 2024/09/09 14:15:55 by zelkalai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,14 @@ int	main(int argc, char **argv)
 	{
 		if (check_arg(argc, argv))
 			return (1);
-		if(set_data1(&philosophers, &data, argc, argv))
-      return(1);
+		if (set_data1(&philosophers, &data, argc, argv))
+			return (1);
 		if (data.number_of_philo == 1)
 		{
 			printf("%lld 1 has taken a fork\n", get_time() - data.start);
 			ft_usleep(data.time_to_die);
 			printf("%lld 1 died\n", get_time() - data.start);
-			dest(&data, philosophers);
-			return (0);
+			return (dest(&data, philosophers), 0);
 		}
 		create_philo(&data, philosophers);
 		dest(&data, philosophers);

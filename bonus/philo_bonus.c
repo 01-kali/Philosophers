@@ -6,7 +6,7 @@
 /*   By: zelkalai <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:38:01 by zelkalai          #+#    #+#             */
-/*   Updated: 2024/08/28 16:38:02 by zelkalai         ###   ########.fr       */
+/*   Updated: 2024/09/09 14:10:07 by zelkalai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,25 @@ int	eating(t_philo *philosopher, t_data *data)
 	return (0);
 }
 
-void	philo(t_philo *philosopher, t_data *data)
+int	check_one_philo(t_data *data)
 {
 	if (data->number_of_philo == 1)
 	{
 		printf("%lld 1 has taken a fork\n", get_time() - data->start);
 		ft_usleep(data->time_to_die);
 		printf("%lld 1 died\n", get_time() - data->start);
-		return ;
+		return (1);
 	}
+	return (0);
+}
+
+void	philo(t_philo *philosopher, t_data *data)
+{
+	if (check_one_philo(data))
+		return ;
 	while (1)
 	{
-    if (data->number_of_meals != -1
+		if (data->number_of_meals != -1
 			&& philosopher->number_of_meals_eaten >= data->number_of_meals)
 			break ;
 		if (eating(philosopher, data))
@@ -79,13 +86,13 @@ void	philo(t_philo *philosopher, t_data *data)
 		if (data->number_of_meals != -1
 			&& philosopher->number_of_meals_eaten >= data->number_of_meals)
 			break ;
-    printf("%lld %d is sleeping\n", get_time() - data->start, \
-				philosopher->i + 1);
+		printf("%lld %d is sleeping\n", get_time() - \
+				data->start, philosopher->i + 1);
 		ft_usleep(data->time_to_sleep);
 		if (check_death(philosopher, data))
 			break ;
-		printf("%lld %d is thinking\n", get_time() - data->start, \
-				philosopher->i + 1);
+		printf("%lld %d is thinking\n", get_time() - \
+				data->start, philosopher->i + 1);
 		usleep(150);
 	}
 }

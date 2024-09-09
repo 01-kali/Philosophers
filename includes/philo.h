@@ -6,7 +6,7 @@
 /*   By: zelkalai <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:27:13 by zelkalai          #+#    #+#             */
-/*   Updated: 2024/08/23 05:42:34 by zelkalai         ###   ########.fr       */
+/*   Updated: 2024/09/09 14:18:58 by zelkalai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int					eating(t_philo *philosopher);
 void				*philo(void *arg);
 
 int					check_death(t_philo *philosopher);
-void				set_data2(t_philo **philosophers, t_data *data, int argc,
+int					set_data2(t_philo **philosophers, t_data *data, int argc,
 						char **argv);
-int				set_data1(t_philo **philosophers, t_data *data, int argc,
+int					set_data1(t_philo **philosophers, t_data *data, int argc,
 						char **argv);
 
 void				create_philo(t_data *data, t_philo *philosophers);

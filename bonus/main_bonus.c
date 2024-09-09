@@ -6,7 +6,7 @@
 /*   By: zelkalai <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:38:09 by zelkalai          #+#    #+#             */
-/*   Updated: 2024/08/28 16:38:10 by zelkalai         ###   ########.fr       */
+/*   Updated: 2024/09/09 14:11:16 by zelkalai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	clean(t_data *data, t_philo *philosophers)
 {
-	int		status;
-	int		i;
+	int	status;
+	int	i;
 
 	i = -1;
 	while (++i < data->number_of_philo)
@@ -55,8 +55,8 @@ int	main(int argc, char **argv)
 			printf("Error: Invalid argument.\n");
 			return (1);
 		}
-		if(set_data(&philosophers, &data, argc, argv))
-      return(1);
+		if (set_data(&philosophers, &data, argc, argv))
+			return (1);
 		clean(&data, philosophers);
 	}
 	else
@@ -64,5 +64,4 @@ int	main(int argc, char **argv)
 		printf("Error: Invalid argument.\n");
 		return (1);
 	}
-	return (0);
 }
