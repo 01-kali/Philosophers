@@ -50,7 +50,8 @@ int	main(int argc, char **argv)
 	{
 		if (check_arg(argc, argv))
 			return (1);
-		set_data1(&philosophers, &data, argc, argv);
+		if(set_data1(&philosophers, &data, argc, argv))
+      return(1);
 		if (data.number_of_philo == 1)
 		{
 			printf("%lld 1 has taken a fork\n", get_time() - data.start);

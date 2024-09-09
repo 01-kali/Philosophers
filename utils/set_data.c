@@ -50,17 +50,25 @@ void	set_data2(t_philo **philosophers, t_data *data, int argc, char **argv)
 	(void)philosophers;
 }
 
-void	set_data1(t_philo **philosophers, t_data *data, int argc, char **argv)
+int	set_data1(t_philo **philosophers, t_data *data, int argc, char **argv)
 {
 	int	i;
 
 	set_data2(philosophers, data, argc, argv);
-	data->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t)
-			* data->number_of_philo);
-	*philosophers = (t_philo *)malloc(sizeof(t_philo) * data->number_of_philo);
-	if (!data->forks || !philosophers)
-		return ;
-	i = -1;
+	data->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * data->number_of_philo);
+  if(!data->forks)
+  {
+	  pthread_mutex_destroy(&(*data).death);
+    return(1);
+  }
+  *philosophers = (t_philo *)malloc(sizeof(t_philo) * data->number_of_philo);
+	if (!philosophers)
+  {
+	  pthread_mutex_destroy(&(*data).death);
+	  free((*data).forks);
+    return(1) ;
+  }
+  i = -1;
 	while (++i < data->number_of_philo)
 		pthread_mutex_init(&data->forks[i], NULL);
 	i = -1;
@@ -74,4 +82,5 @@ void	set_data1(t_philo **philosophers, t_data *data, int argc, char **argv)
 		(*philosophers)[i].last_meal = get_time();
 		(*philosophers)[i].data = data;
 	}
+  return(0);
 }

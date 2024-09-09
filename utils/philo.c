@@ -107,6 +107,9 @@ void	*philo(void *arg)
 	data = philosopher->data;
 	while (1)
 	{
+    if (data->number_of_meals != -1 \
+				&& philosopher->number_of_meals_eaten >= data->number_of_meals)
+			break ;
 		if (eating(philosopher))
 			break ;
 		if (data->number_of_meals != -1 \

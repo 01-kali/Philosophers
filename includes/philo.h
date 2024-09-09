@@ -55,7 +55,7 @@ void				*philo(void *arg);
 int					check_death(t_philo *philosopher);
 void				set_data2(t_philo **philosophers, t_data *data, int argc,
 						char **argv);
-void				set_data1(t_philo **philosophers, t_data *data, int argc,
+int				set_data1(t_philo **philosophers, t_data *data, int argc,
 						char **argv);
 
 void				create_philo(t_data *data, t_philo *philosophers);

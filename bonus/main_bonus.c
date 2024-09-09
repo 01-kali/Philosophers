@@ -56,7 +56,8 @@ int	main(int argc, char **argv)
 			printf("Error: Invalid argument.\n");
 			return (1);
 		}
-		set_data(&philosophers, &data, argc, argv);
+		if(set_data(&philosophers, &data, argc, argv))
+      return(1);
 		clean(&data, philosophers);
 	}
 	else

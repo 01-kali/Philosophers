@@ -14,21 +14,20 @@
 
 int	check_death(t_philo *philosopher, t_data *data)
 {
-	int	i;
-
 	sem_wait(data->death);
 	if (get_time() - philosopher->last_meal > data->time_to_die)
 	{
+
+		sem_post(data->death);
 		usleep(2);
-		if (philosopher->i + 1 > 2)
+		sem_wait(data->death);
+		if (philosopher->i + 1 != 2)
 		{
 			sem_post(data->death);
 			ft_usleep(1);
 			sem_wait(data->death);
 		}
 		printf("%lld %d died\n", get_time() - data->start, philosopher->i + 1);
-		i = -1;
-		data->died = 1;
 		sem_post(data->death);
 		exit(1);
 	}
@@ -36,7 +35,18 @@ int	check_death(t_philo *philosopher, t_data *data)
 	return (0);
 }
 
-void	set_data2(t_philo **philosophers, t_data *data, int argc, char **argv)
+int clean_philo(t_data *data, int i)
+{
+  sem_close(data->death);
+	sem_close(data->forks);
+	sem_unlink("/death");
+	sem_unlink("/forks");
+  if(i == 1)
+    free(data->pids);
+  return(1);
+}
+
+int	set_data2(t_philo **philosophers, t_data *data, int argc, char **argv)
 {
 	data->number_of_philo = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]);
@@ -48,25 +58,31 @@ void	set_data2(t_philo **philosophers, t_data *data, int argc, char **argv)
 		data->number_of_meals = -1;
 	data->start = get_time();
 	data->died = 0;
-	data->pids = (pid_t *)malloc(sizeof(pid_t) * data->number_of_philo);
 	sem_unlink("/death");
 	data->death = sem_open("/death", O_CREAT, 0644, 1);
 	sem_unlink("/forks");
 	data->forks = sem_open("/forks", O_CREAT, 0644, data->number_of_philo);
 	if (data->forks == SEM_FAILED || data->death == SEM_FAILED)
 	{
-		perror("sem_open failed");
-		exit(0);
+		printf("sem_open failed\n");
+		exit(1);
 	}
+  data->pids = (pid_t *)malloc(sizeof(pid_t) * data->number_of_philo);
+	if(!data->pids)
+    return(clean_philo(data, 0)); 
 	*philosophers = (t_philo *)malloc(sizeof(t_philo) * data->number_of_philo);
+  if(!(*philosophers))
+    return(clean_philo(data, 1));
+  return(0);
 }
 
-void	set_data(t_philo **philosophers, t_data *data, int argc, char **argv)
+int	set_data(t_philo **philosophers, t_data *data, int argc, char **argv)
 {
 	int	i;
 
-	set_data2(philosophers, data, argc, argv);
-	i = -1;
+	if(set_data2(philosophers, data, argc, argv))
+	  return(1);
+  i = -1;
 	while (++i < data->number_of_philo)
 	{
 		(*philosophers)[i].i = i;
@@ -84,4 +100,5 @@ void	set_data(t_philo **philosophers, t_data *data, int argc, char **argv)
 		else
 			exit(1);
 	}
+  return(0);
 }

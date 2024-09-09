@@ -52,9 +52,9 @@ int				eating(t_philo *philosopher, t_data *data);
 void			philo(t_philo *philosopher, t_data *data);
 
 int				check_death(t_philo *philosopher, t_data *data);
-void			set_data2(t_philo **philosophers, t_data *data, int argc,
+int			set_data2(t_philo **philosophers, t_data *data, int argc,
 					char **argv);
-void			set_data(t_philo **philosophers, t_data *data, int argc,
+int			set_data(t_philo **philosophers, t_data *data, int argc,
 					char **argv);
 
 long long		get_time(void);

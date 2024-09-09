@@ -71,18 +71,21 @@ void	philo(t_philo *philosopher, t_data *data)
 	}
 	while (1)
 	{
+    if (data->number_of_meals != -1
+			&& philosopher->number_of_meals_eaten >= data->number_of_meals)
+			break ;
 		if (eating(philosopher, data))
 			break ;
 		if (data->number_of_meals != -1
 			&& philosopher->number_of_meals_eaten >= data->number_of_meals)
 			break ;
-		printf("%lld %d is sleeping\n", get_time() - data->start, \
+    printf("%lld %d is sleeping\n", get_time() - data->start, \
 				philosopher->i + 1);
 		ft_usleep(data->time_to_sleep);
 		if (check_death(philosopher, data))
 			break ;
 		printf("%lld %d is thinking\n", get_time() - data->start, \
 				philosopher->i + 1);
-		usleep(200);
+		usleep(150);
 	}
 }
