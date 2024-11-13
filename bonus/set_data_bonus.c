@@ -14,9 +14,9 @@
 
 int	check_death(t_philo *philosopher, t_data *data, t_philo *ph)
 {
-  int i;
+	int	i;
 
-  i = 0;
+	i = 0;
 	if (get_time() - philosopher->last_meal > data->time_to_die)
 	{
 		if (philosopher->i + 1 > 2)
@@ -29,7 +29,7 @@ int	check_death(t_philo *philosopher, t_data *data, t_philo *ph)
 		sem_close(data->forks);
 		sem_unlink("/forks");
 		i = philosopher->i + 1;
-    free(ph);
+		free(ph);
 		free(data->pids);
 		exit(i);
 	}

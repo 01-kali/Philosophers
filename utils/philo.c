@@ -42,19 +42,19 @@ int	eating(t_philo *philosopher)
 
 int	check_one_philo(t_data *data, t_philo *philosopher)
 {
-  if (data->number_of_philo == 1)
-  {
-    if (data->number_of_meals != -1
-      && philosopher->number_of_meals_eaten >= data->number_of_meals)
-      return (1);
-    pthread_mutex_lock(philosopher->l_fork);
-    printf("%lld 1 has taken a fork\n", get_time() - data->start);
-    ft_usleep(data->time_to_die, NULL);
-    pthread_mutex_unlock(philosopher->l_fork);
-    printf("%lld 1 died\n", get_time() - data->start);
-    return (1);
-  }
-  return (0);
+	if (data->number_of_philo == 1)
+	{
+		if (data->number_of_meals != -1
+			&& philosopher->number_of_meals_eaten >= data->number_of_meals)
+			return (1);
+		pthread_mutex_lock(philosopher->l_fork);
+		printf("%lld 1 has taken a fork\n", get_time() - data->start);
+		ft_usleep(data->time_to_die, NULL);
+		pthread_mutex_unlock(philosopher->l_fork);
+		printf("%lld 1 died\n", get_time() - data->start);
+		return (1);
+	}
+	return (0);
 }
 
 int	zzz(t_data *data, t_philo *philosopher)
