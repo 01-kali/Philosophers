@@ -6,7 +6,7 @@
 /*   By: zelkalai <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:38:55 by zelkalai          #+#    #+#             */
-/*   Updated: 2024/08/28 16:39:31 by zelkalai         ###   ########.fr       */
+/*   Updated: 2024/11/13 02:48:30 by zelkalai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ typedef struct s_data
 	int			time_to_sleep;
 	int			number_of_meals;
 	long long	start;
-	int			died;
 	pid_t		*pids;
-	sem_t		*death;
 	sem_t		*forks;
 }				t_data;
 
@@ -45,21 +43,25 @@ typedef struct s_philo
 }				t_philo;
 
 void			clean(t_data *data, t_philo *philosophers);
-
+int				main(int argc, char **argv);
 void			post_forks(t_data *data);
-int				take_forks(t_philo *philosopher, t_data *data);
-int				eating(t_philo *philosopher, t_data *data);
-void			philo(t_philo *philosopher, t_data *data);
-
-int				check_death(t_philo *philosopher, t_data *data);
-int				set_data2(t_philo **philosophers, t_data *data, int argc,
-					char **argv);
-int				set_data(t_philo **philosophers, t_data *data, int argc,
-					char **argv);
-
+int				take_forks(t_philo *philosopher, t_data *data, t_philo *ph);
+int				eating(t_philo *philosopher, t_data *data, t_philo *ph);
+int				check_one_philo(t_data *data, t_philo *philosopher);
+void			philo(t_philo *philosopher, t_data *data, t_philo *ph);
 long long		get_time(void);
-void			ft_usleep(long long time_to_sleep);
-int				ft_atoi2(const char *str);
+void			ft_usleep(long long time_to_sleep, t_philo *philosopher, \
+		t_data *data, t_philo *ph);
+void			ft_check(long num, char *str, int len);
+char			*ft_itoa(int n);
+int				ft_strncmp(const char *s1, const char *s2, size_t n);
+size_t			ft_strlen(const char *s);
 int				ft_atoi(const char *str);
+int				check_death(t_philo *philosopher, t_data *data, t_philo *ph);
+int				clean_philo(t_data *data, int i);
+int				set_data2(t_philo **philosophers, t_data *data, int argc, \
+	char **argv);
+int				set_data(t_philo **philosophers, t_data *data, int argc, \
+	char **argv);
 
 #endif

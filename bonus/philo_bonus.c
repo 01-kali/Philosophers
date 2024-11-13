@@ -18,81 +18,77 @@ void	post_forks(t_data *data)
 	sem_post(data->forks);
 }
 
-int	take_forks(t_philo *philosopher, t_data *data)
+int	take_forks(t_philo *philosopher, t_data *data, t_philo *ph)
 {
 	if ((philosopher->i + 1) % 2 == 1)
-		usleep(600);
+		usleep(100);
 	sem_wait(data->forks);
-	if (check_death(philosopher, data))
+	if (check_death(philosopher, data, ph))
 	{
 		sem_post(data->forks);
 		return (1);
 	}
-	printf("%lld %d has taken a fork\n", get_time() - data->start, \
-			philosopher->i + 1);
+	printf("%lld %d has taken a fork\n", get_time() - data->start,
+		philosopher->i + 1);
+	if ((philosopher->i + 1) % 2 == 1)
+		usleep(50);
 	sem_wait(data->forks);
-	if (check_death(philosopher, data))
+	if (check_death(philosopher, data, ph))
 	{
 		post_forks(data);
 		return (1);
 	}
-	printf("%lld %d has taken a fork\n", get_time() - data->start, \
-			philosopher->i + 1);
+	printf("%lld %d has taken a fork\n", get_time() - data->start,
+		philosopher->i + 1);
 	return (0);
 }
 
-int	eating(t_philo *philosopher, t_data *data)
+int	eating(t_philo *philosopher, t_data *data, t_philo *ph)
 {
-	if (take_forks(philosopher, data))
+	if (take_forks(philosopher, data, ph))
 		return (1);
-	if (check_death(philosopher, data))
-	{
-		post_forks(data);
-		return (1);
-	}
 	philosopher->last_meal = get_time();
 	printf("%lld %d is eating\n", get_time() - data->start, philosopher->i + 1);
-	ft_usleep(data->time_to_eat);
+	ft_usleep(data->time_to_eat, philosopher, data, ph);
 	post_forks(data);
 	philosopher->number_of_meals_eaten++;
-	if (check_death(philosopher, data))
+	if (check_death(philosopher, data, ph))
 		return (1);
 	return (0);
 }
 
-int	check_one_philo(t_data *data)
+int	check_one_philo(t_data *data, t_philo *philosopher)
 {
 	if (data->number_of_philo == 1)
 	{
 		printf("%lld 1 has taken a fork\n", get_time() - data->start);
-		ft_usleep(data->time_to_die);
+		ft_usleep(data->time_to_die, philosopher, data, NULL);
 		printf("%lld 1 died\n", get_time() - data->start);
 		return (1);
 	}
 	return (0);
 }
 
-void	philo(t_philo *philosopher, t_data *data)
+void	philo(t_philo *philosopher, t_data *data, t_philo *ph)
 {
-	if (check_one_philo(data))
+	if (check_one_philo(data, philosopher))
 		return ;
 	while (1)
 	{
 		if (data->number_of_meals != -1
 			&& philosopher->number_of_meals_eaten >= data->number_of_meals)
 			break ;
-		if (eating(philosopher, data))
+		if (eating(philosopher, data, ph))
 			break ;
 		if (data->number_of_meals != -1
 			&& philosopher->number_of_meals_eaten >= data->number_of_meals)
 			break ;
-		printf("%lld %d is sleeping\n", get_time() - \
-				data->start, philosopher->i + 1);
-		ft_usleep(data->time_to_sleep);
-		if (check_death(philosopher, data))
+		printf("%lld %d is sleeping\n", get_time() - data->start, philosopher->i
+			+ 1);
+		ft_usleep(data->time_to_sleep, philosopher, data, ph);
+		if (check_death(philosopher, data, ph))
 			break ;
-		printf("%lld %d is thinking\n", get_time() - \
-				data->start, philosopher->i + 1);
-		usleep(150);
+		printf("%lld %d is thinking\n", get_time() - data->start, philosopher->i
+			+ 1);
 	}
 }

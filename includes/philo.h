@@ -6,7 +6,7 @@
 /*   By: zelkalai <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 17:27:13 by zelkalai          #+#    #+#             */
-/*   Updated: 2024/09/09 14:18:58 by zelkalai         ###   ########.fr       */
+/*   Updated: 2024/11/13 02:45:06 by zelkalai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,27 +43,28 @@ typedef struct s_philo
 	t_data			*data;
 }					t_philo;
 
-void				dest(t_data *data, t_philo *philosophers);
-int					check_arg(int argc, char **argv);
-
 int					take_forks2(t_philo *philosopher);
 int					take_forks1(t_philo *philosopher);
+long long			get_time(void);
+void				ft_usleep(long long time_to_sleep, t_philo *philosopher);
+void				unlock_forks(t_philo *philosopher);
 int					take_forks0(t_philo *philosopher);
 int					eating(t_philo *philosopher);
+int					check_one_philo(t_data *data, t_philo *philosopher);
+int					zzz(t_data *data, t_philo *philosopher);
 void				*philo(void *arg);
-
 int					check_death(t_philo *philosopher);
-int					set_data2(t_philo **philosophers, t_data *data, int argc,
-						char **argv);
+int					set_data2(t_data *data, int argc, char **argv);
 int					set_data1(t_philo **philosophers, t_data *data, int argc,
 						char **argv);
-
+void				dest(t_data *data, t_philo *philosophers);
+int					check_arg(int argc, char **argv);
+int					main(int argc, char **argv);
 void				create_philo(t_data *data, t_philo *philosophers);
-
-long long			get_time(void);
-void				ft_usleep(long long time_to_sleep);
-void				unlock_forks(t_philo *philosopher);
-int					ft_atoi2(const char *str);
+void				ft_check(long num, char *str, int len);
+char				*ft_itoa(int n);
+int					ft_strncmp(const char *s1, const char *s2, size_t n);
+size_t				ft_strlen(const char *s);
 int					ft_atoi(const char *str);
 
 #endif

@@ -52,19 +52,10 @@ int	main(int argc, char **argv)
 			return (1);
 		if (set_data1(&philosophers, &data, argc, argv))
 			return (1);
-		if (data.number_of_philo == 1)
-		{
-			printf("%lld 1 has taken a fork\n", get_time() - data.start);
-			ft_usleep(data.time_to_die);
-			printf("%lld 1 died\n", get_time() - data.start);
-			return (dest(&data, philosophers), 0);
-		}
 		create_philo(&data, philosophers);
 		dest(&data, philosophers);
+		return (0);
 	}
-	else
-	{
-		printf("Error: Invalid argument.\n");
-		return (1);
-	}
+	printf("Error: Invalid argument.\n");
+	return (1);
 }

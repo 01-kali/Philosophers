@@ -17,9 +17,10 @@ void	create_philo(t_data *data, t_philo *philosophers)
 	int	i;
 
 	i = -1;
+	data->start = get_time();
 	while (++i < data->number_of_philo)
-		pthread_create(&philosophers[i].philosopher, NULL, philo, \
-				&philosophers[i]);
+		pthread_create(&philosophers[i].philosopher, NULL, philo,
+			&philosophers[i]);
 	i = -1;
 	while (++i < data->number_of_philo)
 		pthread_join(philosophers[i].philosopher, NULL);

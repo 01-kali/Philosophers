@@ -18,20 +18,14 @@ void	clean(t_data *data, t_philo *philosophers)
 	int	i;
 
 	i = -1;
-	while (++i < data->number_of_philo)
+	waitpid(-1, &status, 0);
+	if (status != 0)
 	{
-		waitpid(-1, &status, 0);
-		if (status != 0)
-		{
-			i = -1;
-			while (++i < data->number_of_philo)
-				kill(data->pids[i], SIGKILL);
-			break ;
-		}
+		i = -1;
+		while (++i < data->number_of_philo)
+			kill(data->pids[i], SIGKILL);
 	}
-	sem_close(data->death);
 	sem_close(data->forks);
-	sem_unlink("/death");
 	sem_unlink("/forks");
 	free(philosophers);
 	free(data->pids);
@@ -42,6 +36,8 @@ int	main(int argc, char **argv)
 	t_data	data;
 	t_philo	*philosophers;
 
+	data.pids = NULL;
+	philosophers = NULL;
 	if (argc == 6 || argc == 5)
 	{
 		if (ft_atoi(argv[1]) < 0 || ft_atoi(argv[2]) < 0 || ft_atoi(argv[3]) < 0
@@ -58,10 +54,8 @@ int	main(int argc, char **argv)
 		if (set_data(&philosophers, &data, argc, argv))
 			return (1);
 		clean(&data, philosophers);
+		return (0);
 	}
-	else
-	{
-		printf("Error: Invalid argument.\n");
-		return (1);
-	}
+	printf("Error: Invalid argument.\n");
+	return (1);
 }
