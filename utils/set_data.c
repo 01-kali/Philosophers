@@ -28,8 +28,8 @@ int	check_death(t_philo *philosopher)
 		{
 			philosopher->data->died = 1;
 			ft_usleep(1, NULL);
-			printf("%lld %d died\n", current_time - philosopher->data->start, \
-					philosopher->i + 1);
+			printf("%lld %d died\n", current_time - philosopher->data->start,
+				philosopher->i + 1);
 		}
 		pthread_mutex_unlock(&philosopher->data->death);
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: zelkalai <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:38:17 by zelkalai          #+#    #+#             */
-/*   Updated: 2024/11/13 02:30:45 by zelkalai         ###   ########.fr       */
+/*   Updated: 2024/11/13 17:14:07 by zelkalai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,32 @@
 
 int	check_death(t_philo *philosopher, t_data *data, t_philo *ph)
 {
+  int i;
+
+  i = 0;
 	if (get_time() - philosopher->last_meal > data->time_to_die)
 	{
-		usleep(2);
-		if (philosopher->i + 1 != 2)
-		{
-			ft_usleep(1, NULL, NULL, NULL);
-		}
-		printf("%lld %d died\n", get_time() - data->start, philosopher->i + 1);
+		if (philosopher->i + 1 > 2)
+			ft_usleep(4, NULL, NULL, NULL);
+		if (philosopher->i + 1 == 1)
+			ft_usleep(2, NULL, NULL, NULL);
+		usleep(500 + philosopher->i + 1);
+		sem_close(data->take);
+		sem_unlink("/take");
 		sem_close(data->forks);
 		sem_unlink("/forks");
-		free(ph);
+		i = philosopher->i + 1;
+    free(ph);
 		free(data->pids);
-		exit(1);
+		exit(i);
 	}
 	return (0);
 }
 
 int	clean_philo(t_data *data, int i)
 {
+	sem_close(data->take);
+	sem_unlink("/take");
 	sem_close(data->forks);
 	sem_unlink("/forks");
 	if (i == 1)
@@ -50,6 +57,10 @@ int	set_data2(t_philo **philosophers, t_data *data, int argc, char **argv)
 		data->number_of_meals = ft_atoi(argv[5]);
 	else
 		data->number_of_meals = -1;
+	sem_unlink("/take");
+	data->take = sem_open("/take", O_CREAT, 0644, 1);
+	if (data->take == SEM_FAILED)
+		exit(1);
 	sem_unlink("/forks");
 	data->forks = sem_open("/forks", O_CREAT, 0644, data->number_of_philo);
 	if (data->forks == SEM_FAILED)

@@ -30,6 +30,7 @@ typedef struct s_data
 	int			number_of_meals;
 	long long	start;
 	pid_t		*pids;
+	sem_t		*take;
 	sem_t		*forks;
 }				t_data;
 
@@ -50,8 +51,8 @@ int				eating(t_philo *philosopher, t_data *data, t_philo *ph);
 int				check_one_philo(t_data *data, t_philo *philosopher);
 void			philo(t_philo *philosopher, t_data *data, t_philo *ph);
 long long		get_time(void);
-void			ft_usleep(long long time_to_sleep, t_philo *philosopher, \
-		t_data *data, t_philo *ph);
+void			ft_usleep(long long time_to_sleep, t_philo *philosopher,
+					t_data *data, t_philo *ph);
 void			ft_check(long num, char *str, int len);
 char			*ft_itoa(int n);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
@@ -59,9 +60,9 @@ size_t			ft_strlen(const char *s);
 int				ft_atoi(const char *str);
 int				check_death(t_philo *philosopher, t_data *data, t_philo *ph);
 int				clean_philo(t_data *data, int i);
-int				set_data2(t_philo **philosophers, t_data *data, int argc, \
-	char **argv);
-int				set_data(t_philo **philosophers, t_data *data, int argc, \
-	char **argv);
+int				set_data2(t_philo **philosophers, t_data *data, int argc,
+					char **argv);
+int				set_data(t_philo **philosophers, t_data *data, int argc,
+					char **argv);
 
 #endif

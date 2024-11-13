@@ -16,15 +16,24 @@ void	clean(t_data *data, t_philo *philosophers)
 {
 	int	status;
 	int	i;
+	int	j;
 
 	i = -1;
-	waitpid(-1, &status, 0);
-	if (status != 0)
+	while (++i < data->number_of_philo)
 	{
-		i = -1;
-		while (++i < data->number_of_philo)
-			kill(data->pids[i], SIGKILL);
+		waitpid(-1, &status, 0);
+		if (status != 0)
+		{
+			j = -1;
+			while (++j < data->number_of_philo)
+				kill(data->pids[j], SIGKILL);
+			printf("%lld %d died\n", get_time() - data->start,
+				WEXITSTATUS(status));
+			break ;
+		}
 	}
+	sem_close(data->take);
+	sem_unlink("/take");
 	sem_close(data->forks);
 	sem_unlink("/forks");
 	free(philosophers);
